@@ -1,0 +1,55 @@
+{
+  "name": "snake-expert",
+  "version": "1.0.0",
+  "description": "An expert system to define, which snake bit you.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aaneitchik/snake-expert.git"
+  },
+  "author": "aaneitchik",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aaneitchik/snake-expert/issues"
+  },
+  "homepage": "https://github.com/aaneitchik/snake-expert#readme",
+  "dependencies": {
+    "axios": "^0.15.2",
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "font-awesome": "^4.7.0",
+    "mongoose": "^4.6.7",
+    "morgan": "^1.7.0",
+    "node-sass": "^3.11.2",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-redux": "^4.4.5",
+    "react-select": "^1.0.0-rc.2",
+    "react-stamp": "^0.6.0",
+    "redux": "^3.6.0",
+    "redux-thunk": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.7",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-plugin-transform-regenerator": "^6.16.1",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-1": "^6.16.0",
+    "babel-preset-stage-3": "^6.17.0",
+    "babel-runtime": "^6.18.0",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.9.0",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}

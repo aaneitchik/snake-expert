@@ -1,0 +1,38 @@
+@import '../../assets/_variables.scss';
+
+.knowledge-base {
+	position: absolute;
+	top: $top-padding - 25px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	color: $secondary-color;
+	overflow: auto;
+
+	.rule {
+		position: relative;
+		padding: 25px;
+
+		p {
+			margin-top: 0;
+			font-weight: bold;
+			color: rgba(0, 0, 0, 0.7);
+		}
+
+		.important {
+			color: rgba(0, 0, 0, 0.6);
+			font-weight: bold;
+		}
+
+		&:not(:last-child):after {
+			content: '';
+			position: absolute;
+			left: 35%;
+			bottom: 0;
+			height: 1px;
+			width: 30%;
+			border-bottom: 1px solid $border-color;
+		}
+
+	}
+}

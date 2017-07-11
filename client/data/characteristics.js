@@ -1,4 +1,4 @@
-export const characteristics = [
+const characteristics = [
 	{
 		name: 'encounter place',
 		values: [
@@ -15,38 +15,19 @@ export const characteristics = [
 	},
 	{
 		name: 'head',
-		values: [
-			'triangular',
-			'oval',
-			'horned'
-		]
+		values: ['triangular', 'oval', 'horned']
 	},
 	{
 		name: 'color',
-		values: [
-			'brown',
-			'gray',
-			'greeny',
-			'beige',
-			'orange',
-			'yellowy'
-		]
+		values: ['brown', 'gray', 'greeny', 'beige', 'orange', 'yellowy']
 	},
 	{
 		name: 'size',
-		values: [
-			'big',
-			'small'
-		]
+		values: ['big', 'small']
 	},
 	{
 		name: 'pupil',
-		values: [
-			'round',
-			'vertical',
-			'invisible',
-			'imposing'
-		]
+		values: ['round', 'vertical', 'invisible', 'imposing']
 	},
 	{
 		name: 'spots',
@@ -69,7 +50,7 @@ export const characteristics = [
 			'horned viper',
 			'common european viper',
 			'montpellier snake',
-			'lataste\'s viper',
+			"lataste's viper",
 			'baskian viper',
 			'typhlops',
 			'green whip snake',
@@ -79,18 +60,15 @@ export const characteristics = [
 			'ladder snake',
 			'smooth snake',
 			'coronella girondica',
-			'ursini\'s viper',
+			"ursini's viper",
 			'baskian viper'
 		]
 	},
 	{
 		name: 'type',
-		values : [
-			'small grass-snake',
-			'viper',
-			'gray viper',
-			'brown viper'
-		],
+		values: ['small grass-snake', 'viper', 'gray viper', 'brown viper'],
 		needsChecking: 2
 	}
 ];
+
+export default characteristics;

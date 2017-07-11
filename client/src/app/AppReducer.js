@@ -5,10 +5,10 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-	switch(action.type) {
+	switch (action.type) {
 		case actions.SET_SELECT_VALUES:
-			return {...state, selectValues: action.payload};
+			return { ...state, selectValues: action.payload };
 		default:
-			return {...state};
+			return { ...state };
 	}
-}
+};

@@ -2,27 +2,33 @@ import React from 'react';
 
 import './Sidebar.scss';
 
+/* global window */
+
 const links = ['Algorithm', 'Knowledge base'];
 
-const Sidebar = (props) => {
+const Sidebar = props => {
 	const height = window.innerHeight + 'px';
 	return (
-		<div className="sidebar" style={{height}}>
+		<div className="sidebar" style={{ height }}>
 			{getMenuItems(props.onMenuHover)}
 		</div>
-	)
+	);
 };
 
 function getMenuItems(hoverCallback) {
 	return links.map((item, index) => {
 		return (
-			<div key={index}
-				 className="sidebar-item"
-				 onMouseEnter={() => hoverCallback(item)}>
-				<span>{item}</span>
+			<div
+				key={index}
+				className="sidebar-item"
+				onMouseEnter={() => hoverCallback(item)}
+			>
+				<span>
+					{item}
+				</span>
 			</div>
 		);
 	});
 }
 
-export {Sidebar};
+export { Sidebar };

@@ -16,7 +16,7 @@ const commonPlugins = [
 	new HTMLWebpackPlugin({
 		template: 'index-template.ejs',
 		inject: false,
-		favicon: './client/assets/images/favicon.png'
+		favicon: './client/assets/favicon.png'
 	}),
 	extractSass
 ];

@@ -220,15 +220,10 @@ async function algorithm(setSelectValues, setQuestion, setResult, updateLog) {
 				).values;
 				setQuestion(question);
 				setSelectValues(options);
-				await new Promise(resolve => {
-					selectPromise = resolve;
-				}).then(answer => {
-					addRecordToLogs(
-						logs,
-						`User answered that the ${question} is ${answer}.`
-					);
-					knowledge[question] = answer;
-				});
+				// eslint-disable-next-line no-await-in-loop
+				await waitForUserInput().then(answer =>
+					saveUserAnswer(answer, question, logs)
+				);
 			} else if (question !== target) {
 				addRecordToLogs(logs, `Found nothing new about ${question}`);
 				knowledge[question] = knowledge[question] || false;
@@ -260,6 +255,22 @@ function checkRule(conditions) {
 	}
 
 	return true;
+}
+
+function waitForUserInput() {
+	return new Promise(resolve => {
+		selectPromise = resolve;
+	});
+}
+
+function saveUserAnswer(answer, question, logs) {
+	return () => {
+		addRecordToLogs(
+			logs,
+			`User answered that the ${question} is ${answer}.`
+		);
+		knowledge[question] = answer;
+	};
 }
 
 function resetSkip() {

@@ -1,20 +1,23 @@
-export const rules = [{
-	if: [
-		{
-			characteristic: 'size',
-			value: 'big'
-		},
-		{
-			characteristic: 'encounter place',
-			value: 'tropical'
-		}
-	],
-	then: {
-		characteristic: 'snake',
-		value: 'bothrops asper'
-	}
-},
+const rules = [
 	{
+		id: 1,
+		if: [
+			{
+				characteristic: 'size',
+				value: 'big'
+			},
+			{
+				characteristic: 'encounter place',
+				value: 'tropical'
+			}
+		],
+		then: {
+			characteristic: 'snake',
+			value: 'bothrops asper'
+		}
+	},
+	{
+		id: 2,
 		if: [
 			{
 				characteristic: 'size',
@@ -31,6 +34,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 3,
 		if: [
 			{
 				characteristic: 'size',
@@ -47,6 +51,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 4,
 		if: [
 			{
 				characteristic: 'size',
@@ -63,6 +68,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 5,
 		if: [
 			{
 				characteristic: 'size',
@@ -79,6 +85,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 6,
 		if: [
 			{
 				characteristic: 'size',
@@ -95,6 +102,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 7,
 		if: [
 			{
 				characteristic: 'size',
@@ -111,6 +119,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 8,
 		if: [
 			{
 				characteristic: 'type',
@@ -127,6 +136,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 9,
 		if: [
 			{
 				characteristic: 'type',
@@ -143,6 +153,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 10,
 		if: [
 			{
 				characteristic: 'type',
@@ -163,6 +174,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 11,
 		if: [
 			{
 				characteristic: 'type',
@@ -179,6 +191,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 12,
 		if: [
 			{
 				characteristic: 'size',
@@ -195,6 +208,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 13,
 		if: [
 			{
 				characteristic: 'type',
@@ -211,6 +225,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 14,
 		if: [
 			{
 				characteristic: 'type',
@@ -227,6 +242,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 15,
 		if: [
 			{
 				characteristic: 'type',
@@ -243,6 +259,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 16,
 		if: [
 			{
 				characteristic: 'type',
@@ -259,10 +276,11 @@ export const rules = [{
 		],
 		then: {
 			characteristic: 'snake',
-			value: 'ursini\'s viper'
+			value: "ursini's viper"
 		}
 	},
 	{
+		id: 17,
 		if: [
 			{
 				characteristic: 'type',
@@ -283,6 +301,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 18,
 		if: [
 			{
 				characteristic: 'type',
@@ -299,10 +318,11 @@ export const rules = [{
 		],
 		then: {
 			characteristic: 'snake',
-			value: 'lataste\'s viper'
+			value: "lataste's viper"
 		}
 	},
 	{
+		id: 19,
 		if: [
 			{
 				characteristic: 'type',
@@ -323,6 +343,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 20,
 		if: [
 			{
 				characteristic: 'type',
@@ -343,6 +364,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 21,
 		if: [
 			{
 				characteristic: 'type',
@@ -363,6 +385,7 @@ export const rules = [{
 		}
 	},
 	{
+		id: 22,
 		if: [
 			{
 				characteristic: 'type',
@@ -383,3 +406,5 @@ export const rules = [{
 		}
 	}
 ];
+
+export default rules;

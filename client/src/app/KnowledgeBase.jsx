@@ -1,10 +1,8 @@
 import React from 'react';
 
-import * as rulesData from '../../data/rules';
+import rules from '../../data/rules';
 
 import './KnowledgeBase.scss';
-
-const rules = [...rulesData.rules];
 
 const KnowledgeBase = () =>
 	<div id="knowledge-base" className="knowledge-base">
@@ -12,9 +10,11 @@ const KnowledgeBase = () =>
 	</div>;
 
 function renderRules() {
-	return rules.map((rule, index) => {
+	return rules.map(rule => {
 		const conditions = rule.if.map((condition, index) =>
-			<span key={index}>
+			<span
+				key={`${rule.id}-${condition.characteristics}-${condition.value}`}
+			>
 				{index ? ' AND ' : ''}
 				{condition.characteristic} IS{' '}
 				<span className="important">{condition.value}</span>
@@ -31,12 +31,12 @@ function renderRules() {
 			</span>
 		);
 		return (
-			<div key={index} className="rule">
-				<p>{index + 1}</p>
+			<div key={rule.id} className="rule">
+				<p>{rule.id}</p>
 				IF {conditions} THEN {result}
 			</div>
 		);
 	});
 }
 
-export { KnowledgeBase };
+export default KnowledgeBase;

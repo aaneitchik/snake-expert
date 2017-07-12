@@ -1,88 +1,73 @@
 import React from 'react';
-import reactStamp from 'react-stamp';
 import { connect } from 'react-redux';
 import Select from 'react-select';
+import { PropTypes } from 'prop-types';
 
 import 'react-select/dist/react-select.css';
 import './App.scss';
 
 import * as actions from './AppActions';
-import * as rulesData from '../../data/rules';
+import rules from '../../data/rules';
 import characteristics from '../../data/characteristics';
 
-import { Sidebar } from './Sidebar';
-import { KnowledgeBase } from './KnowledgeBase';
+import Sidebar from './Sidebar';
+import KnowledgeBase from './KnowledgeBase';
 
-const rules = rulesData.rules.map((rule, number) => ({ ...rule, number }));
+let selectPromise;
 
-const App = reactStamp(React).compose({
-	state: {
-		route: 'Algorithm',
-		logs: [],
-		result: '',
-		question: ''
-	},
-	menuItemChanged(menuItem) {
-		if (menuItem !== this.state.route) {
-			this.setState({ route: menuItem });
-		}
-	},
-	setQuestion(characteristic) {
+class App extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			route: 'Algorithm',
+			logs: [],
+			result: '',
+			question: ''
+		};
+	}
+	onSelectChange = selected => {
+		selectPromise(selected.value);
+	};
+	setQuestion = characteristic => {
 		if (!characteristic) {
 			this.setState({ question: '' });
 		}
 		this.setState({ question: `What is the snake's ${characteristic}?` });
-	},
-	setResult(snake) {
+	};
+	setResult = snake => {
 		if (!snake) {
 			this.setState({ result: "Sorry, can't identify your snake!" });
 			return;
 		}
 		this.setState({ result: `You were bitten by a ${snake}!` });
-	},
-	updateLog(records) {
-		this.setState({ logs: records });
-	},
-	onSelectChange(selected) {
-		selectPromise(selected.value);
-	},
-	restartAlgorithm() {
+	};
+	menuItemChanged = menuItem => {
+		if (menuItem !== this.state.route) {
+			this.setState({ route: menuItem });
+		}
+	};
+	restartAlgorithm = () => {
 		if (selectPromise) {
 			selectPromise('cancel await');
 		}
 		this.setState({ result: '', question: '', logs: [] }, () => {
 			algorithm(
-				this.props.setSelectValues.bind(this),
-				this.setQuestion.bind(this),
-				this.setResult.bind(this),
-				this.updateLog.bind(this)
+				this.props.setSelectValues,
+				this.setQuestion,
+				this.setResult,
+				this.updateLog
 			);
 		});
-	},
-	render() {
-		const height = window.innerHeight + 'px';
-		const content =
-			this.state.route === 'Algorithm'
-				? this.renderAlgorithmPage.bind(this)()
-				: <KnowledgeBase />;
-		return (
-			<div className="app">
-				<Sidebar onMenuHover={this.menuItemChanged.bind(this)} />
-				<div className="content" style={{ height }}>
-					{content}
-				</div>
-			</div>
-		);
-	},
-	renderAlgorithmPage() {
+	};
+	updateLog = records => {
+		this.setState({ logs: records });
+	};
+	renderAlgorithmPage = () => {
 		const { selectValues } = this.props;
 		const startBtn =
 			this.state.question && !this.state.result
 				? ''
-				: <button
-						className="btn"
-						onClick={() => this.restartAlgorithm()}
-					>
+				: <button className="btn" onClick={this.restartAlgorithm}>
 						Start algo
 					</button>;
 		const select =
@@ -90,12 +75,12 @@ const App = reactStamp(React).compose({
 				? <Select
 						name="answer"
 						options={selectValues}
-						onChange={this.onSelectChange.bind(this)}
+						onChange={this.onSelectChange}
 					/>
 				: '';
-		const logs = this.state.logs.map((record, index) =>
-			<p key={index}>
-				{record}
+		const logs = this.state.logs.map(record =>
+			<p key={record.id}>
+				{record.message}
 			</p>
 		);
 
@@ -118,14 +103,29 @@ const App = reactStamp(React).compose({
 				</div>
 			</div>
 		);
+	};
+	render() {
+		const content =
+			this.state.route === 'Algorithm'
+				? this.renderAlgorithmPage()
+				: <KnowledgeBase />;
+		return (
+			<div className="app">
+				<Sidebar onMenuHover={this.menuItemChanged} />
+				<div className="content">
+					{content}
+				</div>
+			</div>
+		);
 	}
-});
+}
 
 const needsChecking = characteristics.reduce((prev, curr) => {
+	const result = { ...prev };
 	if (curr.needsChecking) {
-		prev[curr.name] = curr.needsChecking;
+		result[curr.name] = curr.needsChecking;
 	}
-	return prev;
+	return result;
 }, {});
 
 /* facts we know */
@@ -136,56 +136,62 @@ const noQuestions = ['snake', 'type'];
 const target = 'snake';
 let targetStack = [target];
 let result;
-let selectPromise;
 
 async function algorithm(setSelectValues, setQuestion, setResult, updateLog) {
 	const logs = [];
-	let _rules = [...rules];
+	let rulesCopy = [...rules];
 	knowledge = {};
 	targetStack = [target];
 	result = false;
 	while (!result) {
 		const currentTarget = targetStack[targetStack.length - 1];
-		logs.push(`Trying to find out ${currentTarget}.`);
-		const rule = _rules.find(
+		addRecordToLogs(logs, `Trying to find out ${currentTarget}.`);
+		const currentRule = rulesCopy.find(
 			rule => !rule.skip && rule.then.characteristic === currentTarget
 		);
-		if (rule) {
-			logs.push(`Analyzing rule #${rule.number + 1}.`);
-			const checkResult = checkRule(rule.if);
+		if (currentRule) {
+			addRecordToLogs(logs, `Analyzing rule #${currentRule.id}.`);
+			const checkResult = checkRule(currentRule.if);
 			switch (checkResult) {
 				case true:
-					knowledge[targetStack.pop()] = rule.then.value;
-					logs.push(
-						`Found out that ${currentTarget} is ${rule.then.value}.`
+					knowledge[targetStack.pop()] = currentRule.then.value;
+					addRecordToLogs(
+						logs,
+						`Found out that ${currentTarget} is ${currentRule.then
+							.value}.`
 					);
 					if (targetStack.length === 0) {
-						logs.push('Found the answer!');
+						addRecordToLogs(logs, 'Found the answer!');
 						result = true;
 					} else {
-						logs.push('Going to the next rule.');
-						_rules = _rules.filter(_rule => _rule !== rule);
+						addRecordToLogs(logs, 'Going to the next rule.');
+						rulesCopy = rulesCopy.filter(
+							rule => rule !== currentRule
+						);
 						resetSkip();
 					}
 					break;
 
 				case false:
-					logs.push(
+					addRecordToLogs(
+						logs,
 						'Rule contradicts collected knowledge, skipping to the next rule.'
 					);
-					_rules = _rules.filter(_rule => _rule !== rule);
+					rulesCopy = rulesCopy.filter(rule => rule !== currentRule);
 					break;
 
 				default:
-					logs.push(
+					addRecordToLogs(
+						logs,
 						`Next will try to find out ${checkResult.characteristic}.`
 					);
 					if (checkResult.characteristic === currentTarget) {
-						rule.skip = true;
+						currentRule.skip = true;
 					}
 
 					if (needsChecking[checkResult.characteristic]) {
-						logs.push(
+						addRecordToLogs(
+							logs,
 							`${checkResult.characteristic} is a complex characteristic, will check it ${needsChecking[
 								checkResult.characteristic
 							]} times.`
@@ -205,7 +211,10 @@ async function algorithm(setSelectValues, setQuestion, setResult, updateLog) {
 		} else {
 			const question = targetStack.pop();
 			if (noQuestions.indexOf(question) === -1) {
-				logs.push(`Waiting for the user to specify ${question}.`);
+				addRecordToLogs(
+					logs,
+					`Waiting for the user to specify ${question}.`
+				);
 				const options = characteristics.find(
 					char => char.name === question
 				).values;
@@ -214,19 +223,18 @@ async function algorithm(setSelectValues, setQuestion, setResult, updateLog) {
 				await new Promise(resolve => {
 					selectPromise = resolve;
 				}).then(answer => {
-					logs.push(
+					addRecordToLogs(
+						logs,
 						`User answered that the ${question} is ${answer}.`
 					);
 					knowledge[question] = answer;
 				});
+			} else if (question !== target) {
+				addRecordToLogs(logs, `Found nothing new about ${question}`);
+				knowledge[question] = knowledge[question] || false;
+				resetSkip();
 			} else {
-				if (question !== target) {
-					logs.push(`Found nothing new about ${question}`);
-					knowledge[question] = knowledge[question] || false;
-					resetSkip();
-				} else {
-					result = true;
-				}
+				result = true;
 			}
 		}
 	}
@@ -235,7 +243,7 @@ async function algorithm(setSelectValues, setQuestion, setResult, updateLog) {
 	} else {
 		setResult();
 	}
-	logs.push(`Algorithm finished.`);
+	addRecordToLogs(logs, 'Algorithm finished.');
 	updateLog(logs);
 }
 
@@ -255,10 +263,27 @@ function checkRule(conditions) {
 }
 
 function resetSkip() {
-	rules.forEach(rule => {
-		rule.skip = false;
+	for (let i = 0, len = rules.length; i < len; i++) {
+		rules[i].skip = false;
+	}
+}
+
+function addRecordToLogs(logs, message) {
+	logs.push({
+		id: logs.length,
+		message
 	});
 }
+
+App.propTypes = {
+	selectValues: PropTypes.arrayOf(
+		PropTypes.shape({
+			label: PropTypes.string,
+			value: PropTypes.string
+		})
+	).isRequired,
+	setSelectValues: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
 	return {

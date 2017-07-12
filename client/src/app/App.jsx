@@ -1,12 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import Select from 'react-select';
-import { PropTypes } from 'prop-types';
 
 import 'react-select/dist/react-select.css';
 import './App.scss';
 
-import * as actions from './AppActions';
 import rules from '../../data/rules';
 import characteristics from '../../data/characteristics';
 
@@ -22,7 +19,8 @@ class App extends React.Component {
 			route: 'Algorithm',
 			logs: [],
 			result: '',
-			question: ''
+			question: '',
+			selectValues: []
 		};
 	}
 
@@ -42,6 +40,13 @@ class App extends React.Component {
 		}
 		this.setState({ result: `You were bitten by a ${snake}!` });
 	};
+	setSelectValues = options => {
+		const selectValues = options.map(option => ({
+			value: option,
+			label: option
+		}));
+		this.setState({ selectValues });
+	};
 	menuItemChanged = menuItem => {
 		if (menuItem !== this.state.route) {
 			this.setState({ route: menuItem });
@@ -53,7 +58,7 @@ class App extends React.Component {
 		}
 		this.setState({ result: '', question: '', logs: [] }, () => {
 			algorithm(
-				this.props.setSelectValues,
+				this.setSelectValues,
 				this.setQuestion,
 				this.setResult,
 				this.updateLog
@@ -64,22 +69,22 @@ class App extends React.Component {
 		this.setState({ logs: records });
 	};
 	renderAlgorithmPage = () => {
-		const { selectValues } = this.props;
+		const { selectValues, question, result, logs } = this.state;
 		const startBtn =
-			this.state.question && !this.state.result
+			question && !result
 				? ''
 				: <button className="btn" onClick={this.restartAlgorithm}>
 						Start algo
 					</button>;
 		const select =
-			this.state.question && !this.state.result
+			question && !result
 				? <Select
 						name="answer"
 						options={selectValues}
 						onChange={this.onSelectChange}
 					/>
 				: '';
-		const logs = this.state.logs.map(record =>
+		const logsToRender = logs.map(record =>
 			<p key={record.id}>
 				{record.message}
 			</p>
@@ -91,16 +96,16 @@ class App extends React.Component {
 					{startBtn}
 				</div>
 				<div>
-					{this.state.result ? '' : this.state.question}
+					{result ? '' : question}
 				</div>
 				<div className="select-container">
 					{select}
 				</div>
 				<div>
-					{this.state.result}
+					{result}
 				</div>
 				<div className="logs-container">
-					{logs}
+					{logsToRender}
 				</div>
 			</div>
 		);
@@ -283,20 +288,4 @@ function addRecordToLogs(logs, message) {
 	});
 }
 
-App.propTypes = {
-	selectValues: PropTypes.arrayOf(
-		PropTypes.shape({
-			label: PropTypes.string,
-			value: PropTypes.string
-		})
-	).isRequired,
-	setSelectValues: PropTypes.func.isRequired
-};
-
-function mapStateToProps(state) {
-	return {
-		selectValues: state.app.selectValues
-	};
-}
-
-export default connect(mapStateToProps, actions)(App);
+export default App;

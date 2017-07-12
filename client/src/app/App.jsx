@@ -25,6 +25,7 @@ class App extends React.Component {
 			question: ''
 		};
 	}
+
 	onSelectChange = selected => {
 		selectPromise(selected.value);
 	};
@@ -104,6 +105,7 @@ class App extends React.Component {
 			</div>
 		);
 	};
+
 	render() {
 		const content =
 			this.state.route === 'Algorithm'
@@ -264,13 +266,8 @@ function waitForUserInput() {
 }
 
 function saveUserAnswer(answer, question, logs) {
-	return () => {
-		addRecordToLogs(
-			logs,
-			`User answered that the ${question} is ${answer}.`
-		);
-		knowledge[question] = answer;
-	};
+	addRecordToLogs(logs, `User answered that the ${question} is ${answer}.`);
+	knowledge[question] = answer;
 }
 
 function resetSkip() {
